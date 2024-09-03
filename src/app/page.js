@@ -1,113 +1,188 @@
-import Image from "next/image";
+'use client'
 
-export default function Home() {
+import React, { useState } from 'react';
+import { Box } from '@mui/material';
+import { Container, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material';
+
+const GoldCalculator = () => {
+  const [price, setPrice] = useState(2501); // B3
+  const [currencyRate, setCurrencyRate] = useState(83.95); // B7
+
+  const calculateValues = (isTRQ995) => {
+    const B4 = 32.12; // 1 kg in troy ounce
+    const totalValueUSD = B4 * price;
+
+    const importDuty = (totalValueUSD * currencyRate) * 5 / 100; // 5% Duty
+    const iibxTotalCharges = currencyRate * 14;
+    const brokerageCharges = currencyRate * 7.5;
+    const ifscaFees = ((10 / 1000000) * totalValueUSD) * currencyRate;
+    const gstOnCharges = (iibxTotalCharges + brokerageCharges + ifscaFees) * 18 / 100;
+    const totalChargesWithDuty = importDuty + iibxTotalCharges + brokerageCharges + ifscaFees + gstOnCharges;
+    const totalKgPriceINR = totalChargesWithDuty + (totalValueUSD * currencyRate);
+
+    const per10gmPriceINR = totalKgPriceINR / 100;
+    const withGST = per10gmPriceINR * 1.03; // 3% GST
+    const per10gmChargesWithGST = per10gmPriceINR + withGST;
+
+    return {
+      importDuty,
+      iibxTotalCharges,
+      brokerageCharges,
+      ifscaFees,
+      gstOnCharges,
+      totalChargesWithDuty,
+      totalKgPriceINR,
+      per10gmPriceINR,
+      withGST,
+      per10gmChargesWithGST
+    };
+  };
+
+  const valuesTRQ999 = calculateValues(false);
+  const valuesTRQ995 = calculateValues(true);
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.js</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    <Container>
+      <Typography variant="h4" gutterBottom>Gold Price Calculator</Typography>
+      <TextField
+        label="IIBX Gold Price (B3)"
+        type="number"
+        value={price}
+        onChange={(e) => setPrice(Number(e.target.value))}
+        fullWidth
+        margin="normal"
+      />
+      <TextField
+        label="Currency Rate (B7)"
+        type="number"
+        value={currencyRate}
+        onChange={(e) => setCurrencyRate(Number(e.target.value))}
+        fullWidth
+        margin="normal"
+      />
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
 
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
+      <Box display="flex" justifyContent="space-between">
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
+        <Box flex={1} p={1}>
+          <Typography variant="h5" gutterBottom>999 TRQ Table</Typography>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow style={{ backgroundColor: '#1976d2' }}>
+                  <TableCell style={{ color: '#fff', fontWeight: 'bold', fontSize: '1.1rem', padding: '10px' }}>Parameter</TableCell>
+                  <TableCell style={{ color: '#fff', fontWeight: 'bold', fontSize: '1.1rem', padding: '10px' }}>Value</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow>
+                  <TableCell>Import Duty</TableCell>
+                  <TableCell>{valuesTRQ999.importDuty.toFixed(2)}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>IIBX Total Charges</TableCell>
+                  <TableCell>{valuesTRQ999.iibxTotalCharges.toFixed(2)}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Brokerage Charges</TableCell>
+                  <TableCell>{valuesTRQ999.brokerageCharges.toFixed(2)}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>IFSCA Fees</TableCell>
+                  <TableCell>{valuesTRQ999.ifscaFees.toFixed(2)}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>GST on Charges</TableCell>
+                  <TableCell>{valuesTRQ999.gstOnCharges.toFixed(2)}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Total Charges with Duty</TableCell>
+                  <TableCell>{valuesTRQ999.totalChargesWithDuty.toFixed(2)}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Total 1kg Gold Price in INR</TableCell>
+                  <TableCell>{valuesTRQ999.totalKgPriceINR.toFixed(2)}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Per 10gm Price INR</TableCell>
+                  <TableCell>{valuesTRQ999.per10gmPriceINR.toFixed(2)}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>With 3% GST</TableCell>
+                  <TableCell>{valuesTRQ999.withGST.toFixed(2)}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Per 10gm Charges with GST</TableCell>
+                  <TableCell>{valuesTRQ999.per10gmChargesWithGST.toFixed(2)}</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+        <Box flex={1} p={1}>
+          <Typography variant="h5" gutterBottom>995 TRQ Table</Typography>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow style={{ backgroundColor: '#1976d2' }}>
+                  <TableCell style={{ color: '#fff', fontWeight: 'bold', fontSize: '1.1rem', padding: '10px' }}>Parameter</TableCell>
+                  <TableCell style={{ color: '#fff', fontWeight: 'bold', fontSize: '1.1rem', padding: '10px' }}>Value</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow>
+                  <TableCell>Import Duty</TableCell>
+                  <TableCell>{valuesTRQ995.importDuty.toFixed(2)}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>IIBX Total Charges</TableCell>
+                  <TableCell>{valuesTRQ995.iibxTotalCharges.toFixed(2)}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Brokerage Charges</TableCell>
+                  <TableCell>{valuesTRQ995.brokerageCharges.toFixed(2)}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>IFSCA Fees</TableCell>
+                  <TableCell>{valuesTRQ995.ifscaFees.toFixed(2)}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>GST on Charges</TableCell>
+                  <TableCell>{valuesTRQ995.gstOnCharges.toFixed(2)}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Total Charges with Duty</TableCell>
+                  <TableCell>{valuesTRQ995.totalChargesWithDuty.toFixed(2)}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Total 1kg Gold Price in INR</TableCell>
+                  <TableCell>{valuesTRQ995.totalKgPriceINR.toFixed(2)}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Per 10gm Price INR</TableCell>
+                  <TableCell>{valuesTRQ995.per10gmPriceINR.toFixed(2)}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>With 3% GST</TableCell>
+                  <TableCell>{valuesTRQ995.withGST.toFixed(2)}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Per 10gm Charges with GST</TableCell>
+                  <TableCell>{valuesTRQ995.per10gmChargesWithGST.toFixed(2)}</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+
+      </Box>
+
+
+
+    </Container>
   );
-}
+};
+
+export default GoldCalculator;
