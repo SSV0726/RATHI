@@ -1,16 +1,29 @@
 'use client'
 
-import React, { useState } from 'react';
-import { Container, Box, TextField, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import useSWR from 'swr';
+import Image from 'next/image';
+import React, { useState, useEffect } from 'react';
+import logo from '../../public/logo.webp'; // Adjust the path as needed
+
+import { Container, Box, TextField, Typography, Table, Switch, FormControlLabel , TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+
+const fetcher = (url) => fetch(url).then((res) => res.json());
 
 function GoldPriceCalculator() {
-  const [goldPriceB3, setGoldPriceB3]         = useState(2500);
-  const [currencyRateB7, setCurrencyRateB7]   = useState(85);
-  const [goldPriceG12, setGoldPriceG12]       = useState(800);
-  const [exchangeRateG14, setExchangeRateG14] = useState(85);
+
+  const { data, error }  = useSWR('/config.json', fetcher);
+
+  const [goldPriceB3, setGoldPriceB3]                         = useState(2500);
+  const [currencyRateB7, setCurrencyRateB7]                   = useState(85);
+  const [goldCustomDutyPrice, setgoldCustomDutyPrice]         = useState(800);
+  const [goldCustomsExchangeRate, setgoldCustomsExchangeRate] = useState(85);
+  const [goldCustomPriceDate, setGoldCustomPriceDate]         = useState("30/08/2024");
+  const [goldCustomsExchangeDate, setGoldCustomsExchangeDate] = useState("17/08/2024");
+  const [isTRQHolder, setIsTRQHolder]                         = useState(true);
 
   // Calculate the 5% import duty based on G12 and G14 inputs
-  const importDuty5Percent = (exchangeRateG14 * goldPriceG12 * 100) * 0.05;
+  const importDuty5Percent = (goldCustomsExchangeRate * goldCustomDutyPrice * 100) * 0.05;
+  const importDuty6Percent = (goldCustomsExchangeRate * goldCustomDutyPrice * 100) * 0.06;
 
   const calculateValues = (trq) => {
 
@@ -26,7 +39,11 @@ function GoldPriceCalculator() {
     const brokerageCharges      = currencyRateB7 * 7.5;
     const ifscaFees             = 0.00001 * totalValueUSD * currencyRateB7;
     const gstOnCharges          = (iibxTotalCharges + brokerageCharges + ifscaFees) * 0.18;
-    const totalChargesWithDuty  = importDuty5Percent + iibxTotalCharges + brokerageCharges + ifscaFees + gstOnCharges;
+
+    let totalChargesWithDuty  = importDuty5Percent + iibxTotalCharges + brokerageCharges + ifscaFees + gstOnCharges;
+    if ( ! isTRQHolder ){
+      totalChargesWithDuty = importDuty6Percent + iibxTotalCharges + brokerageCharges + ifscaFees + gstOnCharges;
+    }
     
     const total1KgGoldPriceINR  = totalChargesWithDuty + totalValueINR;
     const per10gmPriceINR       = total1KgGoldPriceINR / 100;
@@ -50,55 +67,126 @@ function GoldPriceCalculator() {
   const values999 = calculateValues(999);
   const values995 = calculateValues(995);
 
+  const getTotalCustomDuty = () => {
+    return goldCustomDutyPrice* goldCustomsExchangeRate;
+  }
+  
+  const handleToggle = () => {
+    setIsTRQHolder(!isTRQHolder);
+  };
+
+  useEffect(() => {
+    if (data) {
+      setgoldCustomDutyPrice(data.importDuty);
+      setgoldCustomsExchangeRate(data.exchangeRate);
+      setGoldCustomPriceDate(data.importDutyDate);
+      setGoldCustomsExchangeDate(data.exchangeRateDate)
+    }
+  }, [data]);
+
+
+
+  if (error) return <div>Failed to load</div>;
+
+  if (!data) return <div>Loading...</div>;
+
+
   return (
     <Container>
-      <Typography variant="h4" gutterBottom>Gold Price Calculator</Typography>
-
+      <br/>
       <Box display="flex" justifyContent="space-between">
-        <Box flex={1} p={1}>
-          <TextField
-            label="IIBX Gold Price (B3)"
-            variant="outlined"
-            fullWidth
-            type="number"
-            value={goldPriceB3}
-            onChange={(e) => setGoldPriceB3(e.target.value)}
-          />
-        </Box>
-        <Box flex={1} p={1}>
-          <TextField
-            label="Currency Rate (B7)"
-            variant="outlined"
-            fullWidth
-            type="number"
-            value={currencyRateB7}
-            onChange={(e) => setCurrencyRateB7(e.target.value)}
-          />
-        </Box>
-        <Box flex={1} p={1}>
-          <TextField
-            label="Gold Price per 10 Grams (G12)"
-            variant="outlined"
-            fullWidth
-            type="number"
-            value={goldPriceG12}
-            onChange={(e) => setGoldPriceG12(e.target.value)}
-          />
-        </Box>
-        <Box flex={1} p={1}>
-          <TextField
-            label="Exchange Rate (G14)"
-            variant="outlined"
-            fullWidth
-            type="number"
-            value={exchangeRateG14}
-            onChange={(e) => setExchangeRateG14(e.target.value)}
-          />
-        </Box>
+        <Typography variant="h4" gutterBottom>Gold Price Calculator</Typography>
+        <Image
+          src={logo}
+          alt="Anand Rathi"
+          width={180} // Specify the width
+          height={60} // Specify the height
+        />
       </Box>
 
+      <hr></hr>
       <Box display="flex" justifyContent="space-between">
+          <Box>
+            <Box flex={4} p={1}>
+              <TextField
+                label="IIBX Gold Price"
+                variant="outlined"
+                fullWidth
+                type="number"
+                value={goldPriceB3}
+                onChange={(e) => setGoldPriceB3(e.target.value)}
+              />
+            </Box>
+            <Box flex={1} p={1}>
+              <TextField
+                label="Currency Rate"
+                variant="outlined"
+                fullWidth
+                type="number"
+                value={currencyRateB7}
+                onChange={(e) => setCurrencyRateB7(e.target.value)}
+              />
+            </Box>
+            <Box mt={2}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={isTRQHolder}
+                    onChange={handleToggle}
+                    name="toggleSwitch"
+                    color="primary"
+                  />
+                }
+                label={isTRQHolder ? 'TRQ Holder ( 5% ) ' : 'NON-TRQ Holder ( 6% ) '}
+              />
+            </Box>
+        </Box>
 
+        <Box display="flex" justifyContent="space-between">
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow style={{ backgroundColor: '#000000' }}>
+                  <TableCell style={{ color: '#fff', fontWeight: 'bold' }}>GOLD Custom Duty </TableCell>
+                  <TableCell style={{ color: '#fff', fontWeight: 'bold' }}></TableCell>
+                </TableRow>
+              </TableHead>
+
+              <TableBody>
+                <TableRow style={{ backgroundColor: '#FFFFF0', borderBottom: '2px solid #000000' }}>
+                  <TableCell>Import Duty as CBIC {goldCustomPriceDate} on 10gm </TableCell>
+                  <TableCell>
+                  $ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(goldCustomDutyPrice.toFixed(2))}
+                  </TableCell>
+                </TableRow>
+                <TableRow style={{ backgroundColor: '#FFFFF0',  borderBottom: '2px solid #000000'}}>
+                  <TableCell>Customs exchange rate on {goldCustomsExchangeDate} </TableCell>
+                  <TableCell>
+                  ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(goldCustomsExchangeRate.toFixed(2))}
+                  </TableCell>
+                </TableRow>
+                <TableRow style={{ backgroundColor: '#FFFFF0', borderBottom: '2px solid #000000' }}>
+                  <TableCell>Total Value for 10gm  </TableCell>
+                  <TableCell>
+                  ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(getTotalCustomDuty())}
+                  </TableCell>
+                </TableRow>
+                <TableRow style={{ backgroundColor: '#FFFFF0', borderBottom: '2px solid #000000' }} >
+                  <TableCell>Final Price with 3% GST</TableCell>
+                  <TableCell>
+                    ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(values995.per10gmWithGst)}
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+      </Box>
+      <hr></hr>
+
+
+      <br></br>
+      <Box display="flex" justifyContent="space-between">
         <Box flex={1} p={1}>
           <Typography variant="h5" gutterBottom>995 TRQ Table</Typography>
           <TableContainer component={Paper}>
@@ -113,7 +201,7 @@ function GoldPriceCalculator() {
               <TableBody>
                 <TableRow>
                   <TableCell>IIBX Gold price </TableCell>
-                  <TableCell>{goldPriceB3.toFixed(2)}</TableCell>
+                  <TableCell>{goldPriceB3}</TableCell>
                 </TableRow>
 
                 <TableRow>
@@ -206,7 +294,7 @@ function GoldPriceCalculator() {
               <TableBody>
                 <TableRow>
                   <TableCell>IIBX Gold price </TableCell>
-                  <TableCell>{goldPriceB3.toFixed(2)}</TableCell>
+                  <TableCell>{goldPriceB3}</TableCell>
                 </TableRow>
 
                 <TableRow>
