@@ -25,6 +25,20 @@ function GoldPriceCalculator() {
   const importDuty5Percent = (goldCustomsExchangeRate * goldCustomDutyPrice * 100) * 0.05;
   const importDuty6Percent = (goldCustomsExchangeRate * goldCustomDutyPrice * 100) * 0.06;
 
+
+
+  const getTotalCustomDuty = () => {
+    return goldCustomDutyPrice* goldCustomsExchangeRate;
+  }
+
+  const getCustomsImportDuty = () => {
+    if( isTRQHolder ){
+      return goldCustomDutyPrice* goldCustomsExchangeRate * 0.05;
+    }else{
+      return goldCustomDutyPrice* goldCustomsExchangeRate * 0.06;
+    }
+  }
+
   const calculateValues = (trq) => {
 
     let troyOunce = 31.99
@@ -40,17 +54,20 @@ function GoldPriceCalculator() {
     const ifscaFees             = 0.00001 * totalValueUSD * currencyRateB7;
     const gstOnCharges          = (iibxTotalCharges + brokerageCharges + ifscaFees) * 0.18;
 
-    let totalChargesWithDuty  = importDuty5Percent + iibxTotalCharges + brokerageCharges + ifscaFees + gstOnCharges;
+    let importDuty = importDuty5Percent;
     if ( ! isTRQHolder ){
-      totalChargesWithDuty = importDuty6Percent + iibxTotalCharges + brokerageCharges + ifscaFees + gstOnCharges;
+      importDuty = importDuty6Percent
     }
+
+    const totalChargesWithDuty = importDuty + iibxTotalCharges + brokerageCharges + ifscaFees + gstOnCharges;
     
     const total1KgGoldPriceINR  = totalChargesWithDuty + totalValueINR;
     const per10gmPriceINR       = total1KgGoldPriceINR / 100;
-    const per10gmWithGst        = per10gmPriceINR * 1.03;
+    const per10gmWithGst        = per10gmPriceINR  + (getTotalCustomDuty() + getCustomsImportDuty())*0.03;
 
     return {
       troyOunce,
+      importDuty,
       totalValueINR,
       totalValueUSD,
       iibxTotalCharges,
@@ -63,13 +80,6 @@ function GoldPriceCalculator() {
       per10gmWithGst,
     };
   };
-
-  const values999 = calculateValues(999);
-  const values995 = calculateValues(995);
-
-  const getTotalCustomDuty = () => {
-    return goldCustomDutyPrice* goldCustomsExchangeRate;
-  }
   
   const handleToggle = () => {
     setIsTRQHolder(!isTRQHolder);
@@ -84,7 +94,8 @@ function GoldPriceCalculator() {
     }
   }, [data]);
 
-
+  const values999 = calculateValues(999);
+  const values995 = calculateValues(995);
 
   if (error) return <div>Failed to load</div>;
 
@@ -172,9 +183,15 @@ function GoldPriceCalculator() {
                   </TableCell>
                 </TableRow>
                 <TableRow style={{ backgroundColor: '#FFFFF0', borderBottom: '2px solid #000000' }} >
-                  <TableCell>Final Price with 3% GST</TableCell>
+                  <TableCell>Import duty </TableCell>
                   <TableCell>
-                    ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(values995.per10gmWithGst)}
+                    ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(getCustomsImportDuty())}
+                  </TableCell>
+                </TableRow>
+                <TableRow style={{ backgroundColor: '#FFFFF0', borderBottom: '2px solid #000000' }} >
+                  <TableCell>3% GST on Gold Value </TableCell>
+                  <TableCell>
+                    ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format( (getTotalCustomDuty() + getCustomsImportDuty())*0.03 )}
                   </TableCell>
                 </TableRow>
               </TableBody>
@@ -224,7 +241,7 @@ function GoldPriceCalculator() {
                 <TableRow >
                   <TableCell>Import Duty</TableCell>
                   <TableCell>
-                  ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(importDuty5Percent.toFixed(2))}
+                  ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(values995.importDuty.toFixed(2))}
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -317,7 +334,7 @@ function GoldPriceCalculator() {
                 <TableRow >
                   <TableCell>Import Duty</TableCell>
                   <TableCell>
-                  ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(importDuty5Percent.toFixed(2))}
+                  ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(values999.importDuty.toFixed(2))}
                   </TableCell>
                 </TableRow>
                 <TableRow>
