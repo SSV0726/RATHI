@@ -183,13 +183,13 @@ function GoldPriceCalculator() {
                   </TableCell>
                 </TableRow>
                 <TableRow style={{ backgroundColor: '#FFFFF0', borderBottom: '2px solid #000000' }} >
-                  <TableCell>Import duty </TableCell>
+                  <TableCell>Import duty for 10gm </TableCell>
                   <TableCell>
                     ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(getCustomsImportDuty())}
                   </TableCell>
                 </TableRow>
                 <TableRow style={{ backgroundColor: '#FFFFF0', borderBottom: '2px solid #000000' }} >
-                  <TableCell>3% GST on Gold Value </TableCell>
+                  <TableCell>3% GST on Gold Value ( 10gm ) </TableCell>
                   <TableCell>
                     ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format( (getTotalCustomDuty() + getCustomsImportDuty())*0.03 )}
                   </TableCell>
@@ -217,29 +217,29 @@ function GoldPriceCalculator() {
 
               <TableBody>
                 <TableRow>
-                  <TableCell>IIBX Gold price </TableCell>
+                  <TableCell>IIBX Gold price ( per Ounce )</TableCell>
                   <TableCell>{goldPriceB3}</TableCell>
                 </TableRow>
 
                 <TableRow>
-                  <TableCell>Troy Ounce </TableCell>
+                  <TableCell>Troy Ounce ( per Kg )</TableCell>
                   <TableCell>{values995.troyOunce.toFixed(2)}</TableCell>
                 </TableRow>
 
                 <TableRow>
-                  <TableCell>Total value in USD </TableCell>
+                  <TableCell>Total value in USD ( per Kg )</TableCell>
                   <TableCell> $ {values995.totalValueUSD.toFixed(2)}</TableCell>
                 </TableRow>
 
                 <TableRow style={{ border: '2px solid black ' , borderBottom: '2px solid #000000' }}>
-                  <TableCell>Total value in INR </TableCell>
+                  <TableCell>Total value in INR ( per Kg )</TableCell>
                   <TableCell>
                   ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(values995.totalValueINR.toFixed(2))}
                   </TableCell>
                 </TableRow>
 
                 <TableRow >
-                  <TableCell>Import Duty</TableCell>
+                  <TableCell>Import Duty ( per Kg ) </TableCell>
                   <TableCell>
                   ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(values995.importDuty.toFixed(2))}
                   </TableCell>
@@ -269,7 +269,7 @@ function GoldPriceCalculator() {
                   </TableCell>
                 </TableRow>
                 <TableRow  style={{  border: '2px solid black ' , borderBottom: '2px solid #000000' }}>
-                  <TableCell>Total Charges with Duty </TableCell>
+                  <TableCell>Total Charges with Duty ( per Kg ) </TableCell>
                   <TableCell>
                   ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(values995.totalChargesWithDuty.toFixed(2))}
                   </TableCell>
@@ -280,14 +280,14 @@ function GoldPriceCalculator() {
                   ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(values995.total1KgGoldPriceINR.toFixed(2))}
                   </TableCell>
                 </TableRow>
-                <TableRow>
-                  <TableCell>Per 10gm Price </TableCell>
+                <TableRow style={{ backgroundColor: '#FFFFF0'}}>
+                  <TableCell>Total 10gm Price </TableCell>
                   <TableCell>
                   ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(values995.per10gmPriceINR.toFixed(2))}
                   </TableCell>
                 </TableRow>
                 <TableRow style={{ backgroundColor: '#FFFFF0', border: '1px solid black bottom' , borderBottom: '2px solid #000000' }} >
-                  <TableCell>Final Price with 3% GST</TableCell>
+                  <TableCell>Final Price with 3% GST ( 10gm )</TableCell>
                   <TableCell>
                     ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(values995.per10gmWithGst)}
                   </TableCell>
@@ -310,29 +310,29 @@ function GoldPriceCalculator() {
 
               <TableBody>
                 <TableRow>
-                  <TableCell>IIBX Gold price </TableCell>
+                  <TableCell>IIBX Gold price ( per Ounce )</TableCell>
                   <TableCell>{goldPriceB3}</TableCell>
                 </TableRow>
 
                 <TableRow>
-                  <TableCell>Troy Ounce </TableCell>
+                  <TableCell>Troy Ounce ( per Kg )</TableCell>
                   <TableCell>{values999.troyOunce.toFixed(2)}</TableCell>
                 </TableRow>
 
                 <TableRow>
-                  <TableCell>Total value in USD </TableCell>
+                  <TableCell>Total value in USD ( per Kg )</TableCell>
                   <TableCell>$ {values999.totalValueUSD.toFixed(2)}</TableCell>
                 </TableRow>
 
                 <TableRow style={{ border: '2px solid black ' , borderBottom: '2px solid #000000' }}>
-                  <TableCell>Total value in INR </TableCell>
+                  <TableCell>Total value in INR ( per Kg )</TableCell>
                   <TableCell>
                   ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(values999.totalValueINR.toFixed(2))}
                   </TableCell>
                 </TableRow>
 
                 <TableRow >
-                  <TableCell>Import Duty</TableCell>
+                  <TableCell>Import Duty ( per Kg ) </TableCell>
                   <TableCell>
                   ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(values999.importDuty.toFixed(2))}
                   </TableCell>
@@ -362,25 +362,25 @@ function GoldPriceCalculator() {
                   </TableCell>
                 </TableRow>
                 <TableRow  style={{  border: '2px solid black ' , borderBottom: '2px solid #000000' }}>
-                  <TableCell>Total Charges with Duty</TableCell>
+                  <TableCell>Total Charges with Duty ( per Kg )</TableCell>
                   <TableCell>
-                    ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(values995.totalChargesWithDuty.toFixed(2))}
+                    ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(values999.totalChargesWithDuty.toFixed(2))}
                   </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>Total 1kg Gold Price in INR</TableCell>
                   <TableCell>
-                  ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(values995.total1KgGoldPriceINR.toFixed(2))}
+                  ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(values999.total1KgGoldPriceINR.toFixed(2))}
                   </TableCell>
                 </TableRow>
-                <TableRow>
-                  <TableCell>Per 10gm Price INR</TableCell>
+                <TableRow  style={{ backgroundColor: '#FFFFF0'}}>
+                  <TableCell>Total 10gm Price INR</TableCell>
                   <TableCell>
-                  ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(values995.per10gmPriceINR.toFixed(2))}
+                  ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(values999.per10gmPriceINR.toFixed(2))}
                   </TableCell>
                 </TableRow>
                 <TableRow style={{ backgroundColor: '#FFFFF0', border: '1px solid black bottom' , borderBottom: '2px solid #000000' }} >
-                  <TableCell>Final Price with 3% GST</TableCell>
+                  <TableCell>Final Price with 3% GST ( 10gm )</TableCell>
                   <TableCell>
                     ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(values999.per10gmWithGst)}
                   </TableCell>
