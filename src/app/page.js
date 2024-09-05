@@ -105,18 +105,22 @@ function GoldPriceCalculator() {
 
   return (
     <Container>
-      <br/>
-      <Box display="flex" justifyContent="space-between">
-        <Typography variant="h4" gutterBottom>Gold Price Calculator</Typography>
-        <Link href="https://www.anandrathigiftcity.com" passHref>
-          <Image
-            src={logo}
-            alt="Anand Rathi"
-            width={180}
-            height={60}
-            style={{ cursor: 'pointer' }} // Add cursor pointer for better UX
-          />
-        </Link>
+
+      <Box sx={{ backgroundColor: '#0f284b', color: 'white', padding: '2px', borderRadius: '8px' }}>
+        <br/>
+
+        <Box display="flex" justifyContent="space-between">
+          <Typography variant="h4" gutterBottom> &nbsp; IIBX Gold Price Calculator</Typography>
+          <Link href="https://www.anandrathigiftcity.com" passHref>
+            <Image
+              src={logo}
+              alt="Anand Rathi"
+              width={180}
+              height={60}
+              style={{ cursor: 'pointer',  padding: '5px', }} // Add cursor pointer for better UX
+            />
+          </Link>
+        </Box>
       </Box>
 
       <hr></hr>
@@ -160,7 +164,7 @@ function GoldPriceCalculator() {
               <Link href="https://www.anandrathigiftcity.com/contact-us.php" passHref>
                 <Box display="flex"   justifyContent="space-between"  sx={{ cursor: 'pointer', textDecoration: 'none', flexGrow: 1 }}>
                   <Typography variant="body1">
-                    Want to know more about IIBX ...        
+                    To Start your IIBX journey ...
                   </Typography>
                   <Button
                     variant="contained"
@@ -420,7 +424,7 @@ function GoldPriceCalculator() {
         <Link href="https://www.anandrathigiftcity.com/contact-us.php" passHref>
           <Box display="flex" alignItems="center" sx={{ cursor: 'pointer', textDecoration: 'none', flexGrow: 1 }}>
             <Typography variant="body1">
-              Interested in adviosry, account opening or want to know more about IIBX ...
+              To Start your IIBX journey ...
             </Typography>
             <Button
               variant="contained"
