@@ -1,11 +1,12 @@
 'use client'
 
 import useSWR from 'swr';
+import Link from 'next/link';
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
 import logo from '../../public/logo.webp'; // Adjust the path as needed
 
-import { Container, Box, TextField, Typography, Table, Switch, FormControlLabel , TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Container, Box, Button, TextField, Typography, Table, Switch, FormControlLabel , TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -107,12 +108,15 @@ function GoldPriceCalculator() {
       <br/>
       <Box display="flex" justifyContent="space-between">
         <Typography variant="h4" gutterBottom>Gold Price Calculator</Typography>
-        <Image
-          src={logo}
-          alt="Anand Rathi"
-          width={180} // Specify the width
-          height={60} // Specify the height
-        />
+        <Link href="https://www.anandrathigiftcity.com" passHref>
+          <Image
+            src={logo}
+            alt="Anand Rathi"
+            width={180}
+            height={60}
+            style={{ cursor: 'pointer' }} // Add cursor pointer for better UX
+          />
+        </Link>
       </Box>
 
       <hr></hr>
@@ -150,6 +154,27 @@ function GoldPriceCalculator() {
                 }
                 label={isTRQHolder ? 'TRQ Holder ( 5% ) ' : 'NON-TRQ Holder ( 6% ) '}
               />
+            </Box>
+            <br/><br/><br/>
+            <Box display="flex" alignItems="center" sx={{ backgroundColor: '#f0f0f0', padding: '10px' }}>
+              <Link href="https://www.anandrathigiftcity.com/contact-us.php" passHref>
+                <Box display="flex"   justifyContent="space-between"  sx={{ cursor: 'pointer', textDecoration: 'none', flexGrow: 1 }}>
+                  <Typography variant="body1">
+                    Want to know more about IIBX ...        
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      marginLeft: '10px',
+                      backgroundColor: 'darkblue',
+                      color: 'white',
+                      '&:hover': { backgroundColor: 'blue' },
+                    }}
+                  >
+                    Click Here !!
+                  </Button>
+                </Box>
+              </Link>
             </Box>
         </Box>
 
@@ -389,7 +414,27 @@ function GoldPriceCalculator() {
             </Table>
           </TableContainer>
         </Box>
+      </Box>
 
+      <Box display="flex" alignItems="center" sx={{ backgroundColor: '#f0f0f0', padding: '10px' }}>
+        <Link href="https://www.anandrathigiftcity.com/contact-us.php" passHref>
+          <Box display="flex" alignItems="center" sx={{ cursor: 'pointer', textDecoration: 'none', flexGrow: 1 }}>
+            <Typography variant="body1">
+              Interested in adviosry, account opening or want to know more about IIBX ...
+            </Typography>
+            <Button
+              variant="contained"
+              sx={{
+                marginLeft: '10px',
+                backgroundColor: 'darkblue',
+                color: 'white',
+                '&:hover': { backgroundColor: 'blue' },
+              }}
+            >
+              Click Here !!
+            </Button>
+          </Box>
+        </Link>
       </Box>
     </Container>
   );
