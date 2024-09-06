@@ -301,7 +301,7 @@ function GoldPriceCalculator() {
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>IFSCA Fees ( ${ values995.ifsc } ) </TableCell>
+                  <TableCell>IFSCA Fees  </TableCell>
                   <TableCell>
                   ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(values995.ifscaFees.toFixed(2))}
                   </TableCell>
