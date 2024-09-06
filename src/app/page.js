@@ -47,20 +47,26 @@ function GoldPriceCalculator() {
       troyOunce = 32.12;
     }
 
-    const totalValueUSD         = troyOunce * goldPriceB3 ; 
-    const totalValueINR         = totalValueUSD * currencyRateB7; // Use the 5% import duty value
+    let importDuty          =  importDuty5Percent;
+    let iibxChargesInDollar = 14;
+    let iibxTotalCharges    = currencyRateB7 * iibxChargesInDollar;
+    let iidlChargesInDollar = 4;
+    let iidlCharges         = currencyRateB7 * iidlChargesInDollar;
 
-    const iibxTotalCharges      = currencyRateB7 * 14;
-    const brokerageCharges      = currencyRateB7 * 7.5;
-    const ifscaFees             = 0.00001 * totalValueUSD * currencyRateB7;
-    const gstOnCharges          = (iibxTotalCharges + brokerageCharges + ifscaFees) * 0.18;
-
-    let importDuty = importDuty5Percent;
     if ( ! isTRQHolder ){
-      importDuty = importDuty6Percent
+      importDuty          = importDuty6Percent
+      iibxChargesInDollar = 10;
+      iibxTotalCharges    = currencyRateB7 * iibxChargesInDollar;
+      iidlChargesInDollar = 3;
+      iidlCharges         = currencyRateB7 * iidlChargesInDollar;
     }
 
-    const totalChargesWithDuty = importDuty + iibxTotalCharges + brokerageCharges + ifscaFees + gstOnCharges;
+    const totalValueUSD         = troyOunce * goldPriceB3 ; 
+    const totalValueINR         = totalValueUSD * currencyRateB7; // Use the 5% import duty value
+    const brokerageCharges      = currencyRateB7 * 7.5;
+    const ifscaFees             = 0.00001 * totalValueUSD * currencyRateB7;
+    const gstOnCharges          = (iibxTotalCharges + iidlCharges +  brokerageCharges + ifscaFees) * 0.18;
+    const totalChargesWithDuty = importDuty + iibxTotalCharges + iidlCharges + brokerageCharges + ifscaFees + gstOnCharges;
     
     const total1KgGoldPriceINR  = totalChargesWithDuty + totalValueINR;
     const per10gmPriceINR       = total1KgGoldPriceINR / 100;
@@ -71,7 +77,10 @@ function GoldPriceCalculator() {
       importDuty,
       totalValueINR,
       totalValueUSD,
+      iibxChargesInDollar,
       iibxTotalCharges,
+      iidlChargesInDollar,
+      iidlCharges,
       brokerageCharges,
       ifscaFees,
       gstOnCharges,
@@ -88,8 +97,8 @@ function GoldPriceCalculator() {
 
   useEffect(() => {
     if (data) {
-      setgoldCustomDutyPrice(data.importDuty);
-      setgoldCustomsExchangeRate(data.exchangeRate);
+      setgoldCustomDutyPrice( parseFloat(data.importDuty) );
+      setgoldCustomsExchangeRate( parseFloat(data.exchangeRate) );
       setGoldCustomPriceDate(data.importDutyDate);
       setGoldCustomsExchangeDate(data.exchangeRateDate)
     }
@@ -234,7 +243,7 @@ function GoldPriceCalculator() {
       <br></br>
       <Box display="flex" justifyContent="space-between">
         <Box flex={1} p={1}>
-          <Typography variant="h5" gutterBottom>995 TRQ Table</Typography>
+          <Typography variant="h5" gutterBottom>995 TRQ Table ( per Kg ) </Typography>
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
@@ -274,25 +283,31 @@ function GoldPriceCalculator() {
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>IIBX Total Charges ( per Kg ) </TableCell>
+                  <TableCell>IIBX Total Charges ( ${ values995.iibxChargesInDollar } per Kg ) </TableCell>
                   <TableCell>
                   ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(values995.iibxTotalCharges.toFixed(2))}
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>Brokerage Charges</TableCell>
+                  <TableCell>IIDL Charges  ( ${ values995.iidlChargesInDollar } per Kg ) </TableCell>
+                  <TableCell>
+                  ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(values995.iidlCharges.toFixed(2))}
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Brokerage Charges  ( $7.5 per Kg )</TableCell>
                   <TableCell>
                   ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(values995.brokerageCharges.toFixed(2))}
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>IFSCA Fees</TableCell>
+                  <TableCell>IFSCA Fees ( ${ values995.ifsc } ) </TableCell>
                   <TableCell>
                   ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(values995.ifscaFees.toFixed(2))}
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>GST on Charges</TableCell>
+                  <TableCell>18% GST on Charges</TableCell>
                   <TableCell>
                   ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(values995.gstOnCharges.toFixed(2))}
                   </TableCell>
@@ -327,7 +342,7 @@ function GoldPriceCalculator() {
         </Box>
 
         <Box flex={1} p={1}>
-          <Typography variant="h5" gutterBottom>999 TRQ Table</Typography>
+          <Typography variant="h5" gutterBottom>999 TRQ Table ( per Kg ) </Typography>
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
@@ -367,13 +382,19 @@ function GoldPriceCalculator() {
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>IIBX Total Charges ( per Kg ) </TableCell>
+                  <TableCell>IIBX Charges ( ${ values999.iibxChargesInDollar } per Kg ) </TableCell>
                   <TableCell>
                   ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(values999.iibxTotalCharges.toFixed(2))}
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>Brokerage Charges</TableCell>
+                  <TableCell>IIDL Charges ( ${ values999.iidlChargesInDollar } per Kg) </TableCell>
+                  <TableCell>
+                  ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(values999.iidlCharges.toFixed(2))}
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Brokerage Charges ( $7.5 per Kg ) </TableCell>
                   <TableCell>
                   ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(values999.brokerageCharges.toFixed(2))}
                   </TableCell>
@@ -385,7 +406,7 @@ function GoldPriceCalculator() {
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>GST on Charges</TableCell>
+                  <TableCell>18% GST on Charges</TableCell>
                   <TableCell>
                   ₹ {new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(values999.gstOnCharges.toFixed(2))}
                   </TableCell>
