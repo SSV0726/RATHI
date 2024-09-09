@@ -6,7 +6,7 @@ import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
 import logo from '../../public/logo.webp'; // Adjust the path as needed
 
-import { Container, Box, Button, TextField, Typography, Table, Switch, FormControlLabel , TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Container, Box, Grid2, Button, TextField, Typography, Table, Switch, FormControlLabel , TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -119,7 +119,7 @@ function GoldPriceCalculator() {
         <br/>
 
         <Box display="flex" justifyContent="space-between">
-          <Typography variant="h4" gutterBottom> &nbsp; IIBX Gold Price Calculator</Typography>
+          <Typography variant="h4" gutterBottom> IIBX Gold Price Calculator</Typography>
           <Link href="https://www.anandrathigiftcity.com" passHref>
             <Image
               src={logo}
@@ -133,8 +133,8 @@ function GoldPriceCalculator() {
       </Box>
 
       <hr></hr>
-      <Box display="flex" justifyContent="space-between">
-          <Box>
+      <Grid2 container>
+        <Box>
             <Box flex={4} p={1}>
               <TextField
                 label="IIBX Gold Price"
@@ -191,7 +191,7 @@ function GoldPriceCalculator() {
             </Box>
         </Box>
 
-        <Box display="flex" justifyContent="space-between">
+        <Box flex={1} p={1}>
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
@@ -236,12 +236,12 @@ function GoldPriceCalculator() {
             </Table>
           </TableContainer>
         </Box>
-      </Box>
+      </Grid2>
       <hr></hr>
 
 
       <br></br>
-      <Box display="flex" justifyContent="space-between">
+      <Grid2 container>
         <Box flex={1} p={1}>
           <Typography variant="h5" gutterBottom>995 TRQ Table ( per Kg ) </Typography>
           <TableContainer component={Paper}>
@@ -439,7 +439,7 @@ function GoldPriceCalculator() {
             </Table>
           </TableContainer>
         </Box>
-      </Box>
+      </Grid2>
 
       <Box display="flex" alignItems="center" sx={{ backgroundColor: '#f0f0f0', padding: '10px' }}>
         <Link href="https://www.anandrathigiftcity.com/contact-us.php" passHref>
