@@ -135,6 +135,10 @@ function GoldPriceCalculator() {
       <hr></hr>
       <Grid2 container>
         <Box>
+            <Typography variant="b" align="center" sx={{ margin: 2  }}>
+              Enter Inputs
+            </Typography>
+            <br/><br/>
             <Box flex={4} p={1}>
               <TextField
                 label="IIBX Gold Price"
@@ -444,9 +448,13 @@ function GoldPriceCalculator() {
       <Box display="flex" alignItems="center" sx={{ backgroundColor: '#f0f0f0', padding: '10px' }}>
         <Link href="https://www.anandrathigiftcity.com/contact-us.php" passHref>
           <Box display="flex" alignItems="center" sx={{ cursor: 'pointer', textDecoration: 'none', flexGrow: 1 }}>
+            
             <Typography variant="body1">
               To Start your IIBX journey ...
             </Typography>
+            
+
+
             <Button
               variant="contained"
               sx={{
@@ -460,6 +468,25 @@ function GoldPriceCalculator() {
             </Button>
           </Box>
         </Link>
+      </Box>
+      <br/>
+      <Box display="flex" alignItems="center" sx={{ backgroundColor: '#f0f0f0', padding: '10px' }}>
+          <Box alignItems="center" sx={{ cursor: 'pointer', textDecoration: 'none', flexGrow: 1 }}>
+            
+            <Typography variant="h6">
+              Disclaimer
+            </Typography>
+            
+            <Typography variant="body1">
+              * Calculation is only for reference purpose. 
+            </Typography>
+            <Typography variant="body1">
+              * The variable parameters are dollar rate and spot price.
+            </Typography>
+            <Typography variant="body1">
+              * Calculation is as per import duty date & customs exchange rate mentioned in the calculator.
+            </Typography>
+          </Box>
       </Box>
     </Container>
   );
