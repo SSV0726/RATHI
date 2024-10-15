@@ -4,7 +4,7 @@ import useSWR from 'swr';
 import Link from 'next/link';
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
-import logo from '../../public/logo.webp'; // Adjust the path as needed
+import logo from '../../../public/logo.webp'; // Adjust the path as needed
 
 import { Container, Box, Grid2, Button, TextField, Typography, Table, Switch, FormControlLabel , TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 
